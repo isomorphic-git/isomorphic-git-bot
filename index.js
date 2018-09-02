@@ -14,10 +14,12 @@ module.exports = (app) => {
   })
   
   // example of probot responding 'Hello World' to a new PR being opened
-  app.on('pull_request.opened', async context => {
+  app.on('*', async context => {
+    app.log('Oooh! A PR was opened!')
     // `context` extracts information from the event, which can be passed to
     // GitHub API calls. This will return:
     //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
+    app.log(JSON.stringify(context))
     const params = context.issue({body: 'Hello World!'})
 
     // Post a comment on the issue
