@@ -27,8 +27,9 @@ module.exports = (app) => {
     const url = context.payload.pull_request.head.repo.clone_url
     const ref = context.payload.pull_request.head.ref
     const dir = fs.mkdtempSync('/tmp/clone-')
-    const results = await git.clone({dir, url, ref, singleBranch: true, depth: 1})
-    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${JSON.stringify(results, null, 2)}`})
+    await git.clone({dir, url, ref, singleBranch: true, depth: 1})
+    let files = await git.listFiles({dir})
+    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${JSON.stringify(files, null, 2)}`})
 
     // Post a comment on the issue
     return context.github.issues.createComment(params)
