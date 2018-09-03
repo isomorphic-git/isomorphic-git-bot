@@ -1,4 +1,6 @@
+const fs = require('fs')
 const git = require('isomorphic-git')
+git.plugins.set('fs', fs)
 
 module.exports = (app) => {
   // Your code here
@@ -23,8 +25,10 @@ module.exports = (app) => {
     //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
     app.log(JSON.stringify(context, null, 2))
     const url = context.payload.pull_request.head.repo.clone_url
-    const branch = context.payload.pull_request.head.ref
-    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}!`})
+    const ref = context.payload.pull_request.head.ref
+    const dir = fs.mkdtempSync('/tmp/clone-')
+    const results = await git.clone({dir, url, ref, singleBranch: true, depth: 1})
+    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${JSON.stringify(results, null, 2)}`})
 
     // Post a comment on the issue
     return context.github.issues.createComment(params)
