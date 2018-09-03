@@ -64,7 +64,7 @@ module.exports = (app) => {
     app.log(`commit...`)
     let sha = await git.commit({
       dir,
-      message: 'format code with prettier-standard',
+      message: 'chore: format code with prettier-standard',
       author: {
         name: 'isomorphic-git-bot',
         email: 'wmhilton+isomorphic-git-bot@gmail.com',
@@ -74,7 +74,7 @@ module.exports = (app) => {
       dir,
       token: process.env.PERSONAL_ACCESS_TOKEN
     })
-    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! I noticed some potential linting errors, so I've auto-formatted the code using [prettier-standard](https://github.com/sheerun/prettier-standard). I hope you don't mind!`})
+    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! I noticed some potential linting errors, so I auto-formatted the code using [prettier-standard](https://github.com/sheerun/prettier-standard). I hope you don't mind. :robot:`})
 
     // Post a comment on the issue
     return context.github.issues.createComment(params)
