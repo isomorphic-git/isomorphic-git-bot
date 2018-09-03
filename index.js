@@ -1,5 +1,5 @@
 const fs = require('fs')
-const prett
+const formatFiles = require('prettier-standard/src/format-files.js')
 const git = require('isomorphic-git')
 git.plugins.set('fs', fs)
 
@@ -30,6 +30,34 @@ module.exports = (app) => {
     const dir = fs.mkdtempSync('/tmp/clone-')
     await git.clone({dir, url, ref, singleBranch: true, depth: 1})
     let files = await git.listFiles({dir})
+    await formatFiles([
+      `${dir}/*.js`,
+      `${dir}/src/*.js`,
+      `${dir}/src/**/*.js`,
+      `${dir}/__tests__/*.js`,
+      `${dir}/__tests__/**/*.js`
+    ])
+    let matrix = await git.statusMatrix({dir, pattern: '**/*.js'})
+    const FILENAME = 0
+    const HEAD = 1
+    const WORKDIR = 2
+    const STAGE = 3
+    let changes = false
+    for (let row of matrix) {
+      if (row[WORKDIR] !== row[STAGE]) {
+        await git.add({dir, filepath: row[FILENAME]})
+        changes = true
+      }
+    }
+    if (!changes) return
+    await git.commit({
+      dir,
+      message: 'format code with prettier-standard',
+      author: {
+        name: 'isomorphic-git[bot]',
+        email: 'bot@isomorphic-git.org',
+      }
+    })
     const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${JSON.stringify(files, null, 2)}`})
 
     // Post a comment on the issue
