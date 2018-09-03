@@ -28,8 +28,9 @@ module.exports = (app) => {
     const url = context.payload.pull_request.head.repo.clone_url
     const ref = context.payload.pull_request.head.ref
     const dir = fs.mkdtempSync('/tmp/clone-')
+    app.log(`cloning...`)
     await git.clone({dir, url, ref, singleBranch: true, depth: 1})
-    let files = await git.listFiles({dir})
+    app.log(`formatting files...`)
     await formatFiles([
       `${dir}/*.js`,
       `${dir}/src/*.js`,
@@ -37,7 +38,9 @@ module.exports = (app) => {
       `${dir}/__tests__/*.js`,
       `${dir}/__tests__/**/*.js`
     ])
+    app.log(`git status...`)
     let matrix = await git.statusMatrix({dir, pattern: '**/*.js'})
+    app.log(`adding changed files...`)
     const FILENAME = 0
     const HEAD = 1
     const WORKDIR = 2
@@ -45,12 +48,17 @@ module.exports = (app) => {
     let changes = false
     for (let row of matrix) {
       if (row[WORKDIR] !== row[STAGE]) {
+        app.log(`modified ${row[FILENAME]}`)
         await git.add({dir, filepath: row[FILENAME]})
         changes = true
       }
     }
-    if (!changes) return
-    await git.commit({
+    if (!changes) {
+      app.log('No changes to push')
+      return
+    }
+    app.log(`commit...`)
+    let sha = await git.commit({
       dir,
       message: 'format code with prettier-standard',
       author: {
@@ -58,7 +66,7 @@ module.exports = (app) => {
         email: 'bot@isomorphic-git.org',
       }
     })
-    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${JSON.stringify(files, null, 2)}`})
+    const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}! ${sha}`})
 
     // Post a comment on the issue
     return context.github.issues.createComment(params)
