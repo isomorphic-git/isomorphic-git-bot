@@ -11,7 +11,8 @@
     "test": "jest && standard"
   },
   "dependencies": {
-    "probot": "^7.1.0"
+    "probot": "^7.1.0",
+    "isomorphic-git": "^0.35.1"
   },
   "devDependencies": {
     "jest": "^23.2.0",

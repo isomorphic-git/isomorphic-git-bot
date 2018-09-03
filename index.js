@@ -1,3 +1,5 @@
+const git = require('isomorphic-git')
+
 module.exports = (app) => {
   // Your code here
   app.log('Yay! The app was loaded!')
@@ -19,7 +21,9 @@ module.exports = (app) => {
     // `context` extracts information from the event, which can be passed to
     // GitHub API calls. This will return:
     //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
-    app.log(JSON.stringify(context))
+    app.log(JSON.stringify(context, null, 2))
+    const url = context.payload.pull_request.head.repo.clone_url
+    const branch = context.payload.pull_request.head.ref
     const params = context.issue({body: `Thank you ${context.payload.pull_request.user.login}!`})
 
     // Post a comment on the issue
