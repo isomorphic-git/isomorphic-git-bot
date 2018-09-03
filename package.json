@@ -13,7 +13,8 @@
   "dependencies": {
     "probot": "^7.1.0",
     "isomorphic-git": "^0.35.1",
-    "prettier-standard": "^8.0.1"
+    "prettier-standard": "^8.0.1",
+    "organize-js-imports": "^1.2.1"
   },
   "devDependencies": {
     "jest": "^23.2.0",

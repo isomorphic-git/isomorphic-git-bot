@@ -1,3 +1,4 @@
+const { execSync } = require('child_process')
 const fs = require('fs')
 const formatFiles = require('prettier-standard/src/format-files.js')
 const git = require('isomorphic-git')
@@ -30,14 +31,17 @@ module.exports = (app) => {
     const dir = fs.mkdtempSync('/tmp/clone-')
     app.log(`cloning...`)
     await git.clone({dir, url, ref, singleBranch: true, depth: 1})
-    app.log(`formatting files...`)
-    await formatFiles([
+    app.log(`organize imports...`)
+    const srcPaths = [
       `${dir}/*.js`,
       `${dir}/src/*.js`,
       `${dir}/src/**/*.js`,
       `${dir}/__tests__/*.js`,
       `${dir}/__tests__/**/*.js`
-    ])
+    ]
+    execSync(`node ./node_modules/organize-js-imports -maxNamesLength 0 -paths ${srcPaths.join(' ')}`)
+    app.log(`formatting files...`)
+    await formatFiles(srcPaths)
     app.log(`git status...`)
     let matrix = await git.statusMatrix({dir, pattern: '**/*.js'})
     app.log(`adding changed files...`)
