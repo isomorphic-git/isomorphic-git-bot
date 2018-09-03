@@ -1,4 +1,5 @@
 const fs = require('fs')
+const prett
 const git = require('isomorphic-git')
 git.plugins.set('fs', fs)
 
