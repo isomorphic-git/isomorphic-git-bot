@@ -4,7 +4,7 @@
   "description": "This bot was built using Probot, a framework for building GitHub Apps. Remix it on Glitch! https://glitch.com/edit/#!/isomorphic-git-bot",
   "author": "wmhilton <wmhilton@gmail.com>",
   "license": "ISC",
-  "repository": "your-repository-name",
+  "repository": "https://github.com/isomorphic-git/isomorphic-git-bot",
   "scripts": {
     "dev": "nodemon --exec \"npm start\"",
     "start": "probot run ./index.js",
