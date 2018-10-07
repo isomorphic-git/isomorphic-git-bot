@@ -1,7 +1,7 @@
 {
   "name": "isomorphic-git-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "This bot was built using Probot, a framework for building GitHub Apps. Remix it on Glitch! https://glitch.com/edit/#!/isomorphic-git-bot",
   "author": "wmhilton <wmhilton@gmail.com>",
   "license": "ISC",
   "repository": "your-repository-name",
