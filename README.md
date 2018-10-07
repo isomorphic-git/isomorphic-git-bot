@@ -1,10 +1,20 @@
 # isomorphic-git-bot
 
-Edit / remix / run on https://glitch.com/edit/#!/isomorphic-git-bot
+The code is running live at [https://isomorphic-git-bot.glitch.me](https://isomorphic-git-bot.glitch.me)
 
-This 
+Edit / remix the code on [https://glitch.com/edit/#!/isomorphic-git-bot](https://glitch.com/edit/#!/isomorphic-git-bot).
+
+* * *
+
+This is one of the "bots" that use the @isomorphic-git-bot account.
+Right now all it can do is run 'prettier-standard' against incoming PRs.
+However in the future it might do other clever things, such as create its own PRs similar to @dependabot.
+
+** Note: If you are reading this on Github, be aware the Github repo is a read-only mirror.**
 
 What follows is the original Probot README.
+
+* * *
 
 Welcome to Probot on Glitch
 =========================
